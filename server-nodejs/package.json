@@ -25,6 +25,7 @@
     "globals": "^16.4.0",
     "jiti": "^2.6.0",
     "prettier": "^3.6.2",
+    "prisma": "^6.17.1",
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.20.5",
@@ -32,6 +33,14 @@
     "typescript-eslint": "^8.44.1"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@apollo/server": "^5.0.0",
+    "@as-integrations/express5": "^1.1.2",
+    "@graphql-tools/schema": "^10.0.0",
+    "@prisma/client": "^6.17.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "graphql": "^16.11.0",
+    "mongodb": "^6.20.0"
   }
 }
