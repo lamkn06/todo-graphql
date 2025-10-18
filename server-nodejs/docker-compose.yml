@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: mongo:8.0
+    # REMOVE the platform override so Docker pulls arm64
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-todo_db}
+    command: ['mongod', '--bind_ip_all'] # drop legacy flags
+    networks: [user_app_network]
+    ports: ['27017:27017']
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  user_app_network:
+    name: user_app_network

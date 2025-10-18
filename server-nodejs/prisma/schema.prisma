@@ -1,0 +1,73 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  email        String  @unique
+  passwordHash String
+  isActive     Boolean @default(true)
+
+  todos  Todo[]
+  labels Label[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Todo {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  title       String
+  description String?
+
+  // time fields
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime? // soft delete
+  finishedAt DateTime?
+  deadline   DateTime?
+
+  // N-N relationship with Label
+  todoLabels TodoLabel[]
+
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([deadline])
+  @@index([deletedAt])
+}
+
+model Label {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  name  String
+  color String?
+
+  todoLabels TodoLabel[]
+
+  // prevent duplicate label names for same user
+  @@unique([userId, name])
+}
+
+model TodoLabel {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  todoId  String @db.ObjectId
+  labelId String @db.ObjectId
+
+  todo  Todo  @relation(fields: [todoId], references: [id])
+  label Label @relation(fields: [labelId], references: [id])
+
+  @@unique([todoId, labelId]) // prevent duplicate label assignments to same todo
+  @@index([todoId])
+  @@index([labelId])
+}
