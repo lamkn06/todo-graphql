@@ -26,6 +26,12 @@ export type CreateTodoInput = {
   title: Scalars['String']['input'];
 };
 
+export type DeletionResponse = {
+  __typename?: 'DeletionResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type Label = {
   __typename?: 'Label';
   color?: Maybe<Scalars['String']['output']>;
@@ -41,6 +47,7 @@ export type Mutation = {
   createLabel: Label;
   createTodo: Todo;
   deleteLabel: Scalars['Boolean']['output'];
+  deleteTodo?: Maybe<DeletionResponse>;
   updateLabel: Label;
   updateTodo: Todo;
 };
@@ -57,6 +64,11 @@ export type MutationCreateTodoArgs = {
 
 
 export type MutationDeleteLabelArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteTodoArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -89,6 +101,7 @@ export type Todo = {
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  isFinished: Scalars['Boolean']['output'];
   labels?: Maybe<Array<Label>>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];

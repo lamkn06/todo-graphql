@@ -8,7 +8,7 @@ export type GraphQLContext = {
   user: { id: string; email?: string };
 };
 
-export async function createContext({ req }: any) {
+export const createContext = async ({ req }: any) => {
   const auth = (req.headers.authorization as string | undefined) ?? '';
   const token = auth.replace(/^Bearer\s+/i, '');
 
@@ -37,4 +37,4 @@ export async function createContext({ req }: any) {
   }
 
   return { prisma, user };
-}
+};

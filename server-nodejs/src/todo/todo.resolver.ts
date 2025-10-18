@@ -5,6 +5,8 @@ import {
 import type { GraphQLContext } from '../graphql/context';
 import type {
   CreateTodoInput,
+  DeletionResponse,
+  Todo,
   UpdateTodoInput,
 } from '../generated/graphql-types';
 import { TodoService } from './todo.service';
@@ -35,10 +37,19 @@ export const TodoResolvers = {
     updateTodo: async (
       _: unknown,
       args: { id: string; input: UpdateTodoInput },
-      ctx: GraphQLContext,
-    ) => {
+    ): Promise<Todo> => {
       const input = UpdateTodoInputSchema().parse(args.input);
       return await todoService.updateTodo(args.id, input);
+    },
+    deleteTodo: async (
+      _: unknown,
+      args: { id: string },
+    ): Promise<DeletionResponse> => {
+      await todoService.deleteTodo(args.id);
+      return {
+        success: true,
+        message: `${args.id} deleted successfully`,
+      };
     },
   },
 

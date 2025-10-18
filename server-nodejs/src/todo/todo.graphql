@@ -4,6 +4,7 @@ scalar JSON
 type Todo {
   id: ID!
   title: String!
+  isFinished: Boolean!
   description: String
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -24,7 +25,13 @@ type Query {
   todos: [Todo!]!
 }
 
+type DeletionResponse {
+  success: Boolean!
+  message: String!
+}
+
 type Mutation {
   createTodo(input: CreateTodoInput!): Todo!
   updateTodo(id: ID!, input: UpdateTodoInput!): Todo!
+  deleteTodo(id: ID!): DeletionResponse
 }

@@ -66,6 +66,16 @@ export class TodoService {
 
   async deleteTodo(id: string): Promise<void> {
     try {
+      const todo = await this.todoRepository.findTodoById(id);
+      if (!todo) {
+        throw new GraphQLError('Todo not found', {
+          extensions: {
+            code: 'NOT_FOUND',
+            http: { status: 404 },
+          },
+        });
+      }
+
       return await this.todoRepository.deleteTodo(id);
     } catch (error) {
       throw new Error(
