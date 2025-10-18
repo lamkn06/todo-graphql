@@ -1,6 +1,9 @@
 import { CreateTodoInputSchema } from '../generated/zod-schemas';
 import type { GraphQLContext } from '../graphql/context';
 import type { CreateTodoInput } from '../generated/graphql-types';
+import { TodoService } from './todo.service';
+
+const todoService = new TodoService();
 
 export const TodoResolvers = {
   Query: {
@@ -15,12 +18,10 @@ export const TodoResolvers = {
     ) => {
       const input = CreateTodoInputSchema().parse(args.input);
 
-      return ctx.prisma.todo.create({
-        data: {
-          userId: '68f317e44c0019025c42e98f',
-          title: input.title,
-          description: input.description ?? null,
-        },
+      return await todoService.createTodo({
+        userId: ctx.user.id,
+        title: input.title,
+        description: input.description || undefined,
       });
     },
   },

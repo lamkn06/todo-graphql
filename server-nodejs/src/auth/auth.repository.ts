@@ -1,7 +1,6 @@
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { CreateUserData } from './auth.types';
-
-const prisma = new PrismaClient();
 
 export class AuthRepository {
   async findUserByEmail(email: string): Promise<User | null> {

@@ -1,11 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
-
-const prisma = new PrismaClient();
+import { prisma } from '../lib/prisma';
 
 export type GraphQLContext = {
   prisma: PrismaClient;
-  user: { id: string; email?: string } | null;
+  user: { id: string; email?: string };
 };
 
 export async function createContext({ req }: any) {
