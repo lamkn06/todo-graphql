@@ -17,19 +17,24 @@
     "db:reset": "prisma migrate reset",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "migrate:status": "prisma migrate status"
+    "migrate:status": "prisma migrate status",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/typescript": "^5.0.2",
+    "@graphql-codegen/typescript-operations": "^5.0.2",
     "@types/express": "^5.0.3",
     "@types/node": "^24.5.2",
     "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.4.0",
+    "graphql-codegen-typescript-validation-schema": "^0.18.1",
     "jiti": "^2.6.0",
     "prettier": "^3.6.2",
     "prisma": "^6.17.1",
@@ -42,6 +47,8 @@
   "dependencies": {
     "@apollo/server": "^5.0.0",
     "@as-integrations/express5": "^1.1.2",
+    "@graphql-tools/load-files": "^7.0.1",
+    "@graphql-tools/merge": "^9.0.0",
     "@graphql-tools/schema": "^10.0.0",
     "@prisma/client": "^6.17.1",
     "bcrypt": "^6.0.0",
@@ -50,6 +57,7 @@
     "dotenv": "^16.4.5",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.20.0",
     "zod": "^4.1.12"

@@ -3,6 +3,11 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
+export type GraphQLContext = {
+  prisma: PrismaClient;
+  user: { id: string; email?: string } | null;
+};
+
 export async function createContext({ req }: any) {
   const auth = (req.headers.authorization as string | undefined) ?? '';
   const token = auth.replace(/^Bearer\s+/i, '');
