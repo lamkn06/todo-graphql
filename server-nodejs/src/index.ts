@@ -1,14 +1,20 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
+import { json } from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import { ENV } from './config/env';
-import { schema } from './graphql/schema';
 import { createContext } from './graphql/context';
-
+import { schema } from './graphql/schema';
+import authRoutes from './auth/auth.routes';
 const app = express();
+app.use(cors({ origin: ENV.CORS_ORIGIN, credentials: true }));
+app.use(cookieParser());
+app.use(json());
 
 // Basic route
-app.get('/', (_, res) => res.send('Hello TypeScript!'));
+app.use('/auth', authRoutes);
 
 // Create Apollo Server
 const server = new ApolloServer({ schema });
