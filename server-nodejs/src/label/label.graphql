@@ -1,0 +1,31 @@
+scalar DateTime
+
+type Label {
+  id: ID!
+  name: String!
+  color: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  todos: [Todo!]!
+}
+
+input CreateLabelInput {
+  name: String!
+  color: String
+}
+
+input UpdateLabelInput {
+  name: String
+  color: String
+}
+
+type Query {
+  labels: [Label!]!
+  label(id: ID!): Label
+}
+
+type Mutation {
+  createLabel(input: CreateLabelInput!): Label!
+  updateLabel(id: ID!, input: UpdateLabelInput!): Label!
+  deleteLabel(id: ID!): Boolean!
+}

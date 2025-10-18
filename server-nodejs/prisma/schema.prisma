@@ -29,6 +29,8 @@ model Todo {
   title       String
   description String?
 
+  isFinished Boolean @default(false)
+
   // time fields
   createdAt  DateTime  @default(now())
   deletedAt  DateTime? // soft delete
@@ -43,6 +45,7 @@ model Todo {
   @@index([userId])
   @@index([deadline])
   @@index([deletedAt])
+  @@index([isFinished])
 }
 
 model Label {

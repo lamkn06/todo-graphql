@@ -1,13 +1,21 @@
-import { CreateTodoInputSchema } from '../generated/zod-schemas';
+import {
+  CreateTodoInputSchema,
+  UpdateTodoInputSchema,
+} from '../generated/zod-schemas';
 import type { GraphQLContext } from '../graphql/context';
-import type { CreateTodoInput } from '../generated/graphql-types';
+import type {
+  CreateTodoInput,
+  UpdateTodoInput,
+} from '../generated/graphql-types';
 import { TodoService } from './todo.service';
-
+import { labelService } from '../label/label.resolver';
 const todoService = new TodoService();
 
 export const TodoResolvers = {
   Query: {
-    todos: () => [],
+    todos: (_: unknown, __: unknown, ctx: GraphQLContext) => {
+      return todoService.getTodosByUserId(ctx.user.id);
+    },
   },
 
   Mutation: {
@@ -23,6 +31,20 @@ export const TodoResolvers = {
         title: input.title,
         description: input.description || undefined,
       });
+    },
+    updateTodo: async (
+      _: unknown,
+      args: { id: string; input: UpdateTodoInput },
+      ctx: GraphQLContext,
+    ) => {
+      const input = UpdateTodoInputSchema().parse(args.input);
+      return await todoService.updateTodo(args.id, input);
+    },
+  },
+
+  Todo: {
+    labels: async (parent: any, _: unknown, ctx: GraphQLContext) => {
+      return await labelService.getLabelsByTodoId(parent.id);
     },
   },
 };

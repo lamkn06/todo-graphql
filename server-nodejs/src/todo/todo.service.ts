@@ -1,5 +1,7 @@
 import { Todo } from '@prisma/client';
 import { TodoRepository } from './todo.repository';
+import { UpdateTodoInput } from '~/generated/graphql-types';
+import { GraphQLError } from 'graphql/error';
 
 export class TodoService {
   private todoRepository: TodoRepository;
@@ -42,14 +44,18 @@ export class TodoService {
     }
   }
 
-  async updateTodo(
-    id: string,
-    data: {
-      title?: string;
-      description?: string;
-    },
-  ): Promise<Todo> {
+  async updateTodo(id: string, data: UpdateTodoInput): Promise<Todo> {
     try {
+      const todo = await this.todoRepository.findTodoById(id);
+      if (!todo) {
+        throw new GraphQLError('Todo not found', {
+          extensions: {
+            code: 'NOT_FOUND',
+            http: { status: 404 },
+          },
+        });
+      }
+
       return await this.todoRepository.updateTodo(id, data);
     } catch (error) {
       throw new Error(

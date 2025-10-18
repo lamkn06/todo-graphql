@@ -1,4 +1,5 @@
 scalar DateTime
+scalar JSON
 
 type Todo {
   id: ID!
@@ -6,11 +7,17 @@ type Todo {
   description: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  labels: [Label!]
 }
 
 input CreateTodoInput {
   title: String!
   description: String
+}
+
+input UpdateTodoInput {
+  key: String!
+  value: JSON
 }
 
 type Query {
@@ -19,4 +26,5 @@ type Query {
 
 type Mutation {
   createTodo(input: CreateTodoInput!): Todo!
+  updateTodo(id: ID!, input: UpdateTodoInput!): Todo!
 }

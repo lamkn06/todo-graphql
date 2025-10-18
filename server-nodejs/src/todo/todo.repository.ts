@@ -1,5 +1,6 @@
 import { Todo } from '@prisma/client';
 import { prisma } from '../lib/prisma';
+import { UpdateTodoInput } from '~/generated/graphql-types';
 
 export class TodoRepository {
   async findTodosByUserId(userId: string): Promise<Todo[]> {
@@ -21,20 +22,19 @@ export class TodoRepository {
     description?: string;
   }): Promise<Todo> {
     return prisma.todo.create({
-      data,
+      data: {
+        ...data,
+        isFinished: false,
+      },
     });
   }
 
-  async updateTodo(
-    id: string,
-    data: {
-      title?: string;
-      description?: string;
-    },
-  ): Promise<Todo> {
+  async updateTodo(id: string, data: UpdateTodoInput): Promise<Todo> {
     return prisma.todo.update({
       where: { id },
-      data,
+      data: {
+        [data.key as keyof Todo]: data.value,
+      },
     });
   }
 

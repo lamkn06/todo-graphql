@@ -5,7 +5,7 @@ import { prisma } from '../lib/prisma';
 
 export type GraphQLContext = {
   prisma: PrismaClient;
-  user: { id: string; email?: string } | null;
+  user: { id: string; email?: string };
 };
 
 export async function createContext({ req }: any) {
