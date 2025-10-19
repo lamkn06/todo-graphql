@@ -7,6 +7,8 @@ import type {
   CreateTodoInput,
   DeletionResponse,
   Todo,
+  TodoPaginationInput,
+  TodosFilterInput,
   UpdateTodoInput,
 } from '../generated/graphql-types';
 import { TodoService } from './todo.service';
@@ -15,8 +17,12 @@ const todoService = new TodoService();
 
 export const TodoResolvers = {
   Query: {
-    todos: (_: unknown, __: unknown, ctx: GraphQLContext) => {
-      return todoService.getTodosByUserId(ctx.user.id);
+    todos: (
+      _: unknown,
+      args: { pagination?: TodoPaginationInput; filter?: TodosFilterInput },
+      ctx: GraphQLContext,
+    ) => {
+      return todoService.getTodosByUserId(ctx.user.id, args);
     },
   },
 
@@ -25,7 +31,7 @@ export const TodoResolvers = {
       _: unknown,
       args: { input: CreateTodoInput },
       ctx: GraphQLContext,
-    ) => {
+    ): Promise<Todo> => {
       const input = CreateTodoInputSchema().parse(args.input);
 
       return await todoService.createTodo({

@@ -11,6 +11,15 @@ type Todo {
   labels: [Label!]
 }
 
+input TodoPaginationInput {
+  page: Int
+  limit: Int
+}
+
+input TodosFilterInput {
+  isFinished: Boolean
+}
+
 input CreateTodoInput {
   title: String!
   description: String
@@ -22,7 +31,7 @@ input UpdateTodoInput {
 }
 
 type Query {
-  todos: [Todo!]!
+  todos(pagination: TodoPaginationInput, filter: TodosFilterInput): [Todo!]!
 }
 
 type DeletionResponse {

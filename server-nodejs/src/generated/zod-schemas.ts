@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { CreateLabelInput, CreateTodoInput, UpdateLabelInput, UpdateTodoInput } from './graphql-types'
+import { CreateLabelInput, CreateTodoInput, TodoPaginationInput, TodosFilterInput, UpdateLabelInput, UpdateTodoInput } from './graphql-types'
 
 type Properties<T> = Required<{
   [K in keyof T]: z.ZodType<T[K]>;
@@ -22,6 +22,19 @@ export function CreateTodoInputSchema(): z.ZodObject<Properties<CreateTodoInput>
   return z.object({
     description: z.string().nullish(),
     title: z.string()
+  })
+}
+
+export function TodoPaginationInputSchema(): z.ZodObject<Properties<TodoPaginationInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish()
+  })
+}
+
+export function TodosFilterInputSchema(): z.ZodObject<Properties<TodosFilterInput>> {
+  return z.object({
+    isFinished: z.boolean().nullish()
   })
 }
 

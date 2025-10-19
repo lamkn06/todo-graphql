@@ -1,12 +1,35 @@
-import { Todo } from '@prisma/client';
+import { Prisma, Todo } from '@prisma/client';
 import { prisma } from '../lib/prisma';
-import { UpdateTodoInput } from '~/generated/graphql-types';
+import {
+  TodoPaginationInput,
+  TodosFilterInput,
+  UpdateTodoInput,
+} from '~/generated/graphql-types';
 
 export class TodoRepository {
-  async findTodosByUserId(userId: string): Promise<Todo[]> {
+  async findTodosByUserId(
+    userId: string,
+    args: { pagination?: TodoPaginationInput; filter?: TodosFilterInput },
+  ): Promise<Todo[]> {
+    const { pagination, filter } = args;
+    let where: Prisma.TodoWhereInput = { userId };
+    console.log('filter', filter);
+    if (filter?.isFinished !== null) {
+      where.isFinished = filter?.isFinished;
+    }
+
+    let skip = 0;
+    let take = 10;
+    if (pagination) {
+      take = pagination.limit ?? 10;
+      skip = (pagination?.page ?? 0) * take;
+    }
+
     return prisma.todo.findMany({
-      where: { userId },
+      where,
       orderBy: { createdAt: 'desc' },
+      skip,
+      take,
     });
   }
 

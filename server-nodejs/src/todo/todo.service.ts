@@ -1,6 +1,10 @@
 import { Todo } from '@prisma/client';
 import { TodoRepository } from './todo.repository';
-import { UpdateTodoInput } from '~/generated/graphql-types';
+import {
+  TodoPaginationInput,
+  TodosFilterInput,
+  UpdateTodoInput,
+} from '~/generated/graphql-types';
 import { GraphQLError } from 'graphql/error';
 
 export class TodoService {
@@ -10,9 +14,12 @@ export class TodoService {
     this.todoRepository = new TodoRepository();
   }
 
-  async getTodosByUserId(userId: string): Promise<Todo[]> {
+  async getTodosByUserId(
+    userId: string,
+    args: { pagination?: TodoPaginationInput; filter?: TodosFilterInput },
+  ): Promise<Todo[]> {
     try {
-      return await this.todoRepository.findTodosByUserId(userId);
+      return await this.todoRepository.findTodosByUserId(userId, args);
     } catch (error) {
       throw new Error(
         `Failed to get todos for user ${userId}: ${error instanceof Error ? error.message : 'Unknown error'}`,

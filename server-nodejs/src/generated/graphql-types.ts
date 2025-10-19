@@ -96,6 +96,12 @@ export type QueryLabelArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryTodosArgs = {
+  filter?: InputMaybe<TodosFilterInput>;
+  pagination?: InputMaybe<TodoPaginationInput>;
+};
+
 export type Todo = {
   __typename?: 'Todo';
   createdAt: Scalars['DateTime']['output'];
@@ -105,6 +111,15 @@ export type Todo = {
   labels?: Maybe<Array<Label>>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TodoPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type TodosFilterInput = {
+  isFinished?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateLabelInput = {
