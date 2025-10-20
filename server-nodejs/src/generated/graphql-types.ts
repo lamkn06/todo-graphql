@@ -88,7 +88,7 @@ export type Query = {
   __typename?: 'Query';
   label?: Maybe<Label>;
   labels: Array<Label>;
-  todos: Array<Todo>;
+  todos: TodoList;
 };
 
 
@@ -111,6 +111,14 @@ export type Todo = {
   labels?: Maybe<Array<Label>>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TodoList = {
+  __typename?: 'TodoList';
+  items: Array<Todo>;
+  limit: Scalars['Int']['output'];
+  page: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
 };
 
 export type TodoPaginationInput = {

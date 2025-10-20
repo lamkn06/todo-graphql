@@ -9,6 +9,7 @@ import type {
   Todo,
   TodoPaginationInput,
   TodosFilterInput,
+  TodoList,
   UpdateTodoInput,
 } from '../generated/graphql-types';
 import { TodoService } from './todo.service';
@@ -21,7 +22,7 @@ export const TodoResolvers = {
       _: unknown,
       args: { pagination?: TodoPaginationInput; filter?: TodosFilterInput },
       ctx: GraphQLContext,
-    ) => {
+    ): Promise<TodoList> => {
       return todoService.getTodosByUserId(ctx.user.id, args);
     },
   },

@@ -1,6 +1,13 @@
 scalar DateTime
 scalar JSON
 
+type TodoList {
+  items: [Todo!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
 type Todo {
   id: ID!
   title: String!
@@ -31,7 +38,7 @@ input UpdateTodoInput {
 }
 
 type Query {
-  todos(pagination: TodoPaginationInput, filter: TodosFilterInput): [Todo!]!
+  todos(pagination: TodoPaginationInput, filter: TodosFilterInput): TodoList!
 }
 
 type DeletionResponse {

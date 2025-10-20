@@ -3,6 +3,7 @@ import { TodoRepository } from './todo.repository';
 import {
   TodoPaginationInput,
   TodosFilterInput,
+  TodoList,
   UpdateTodoInput,
 } from '~/generated/graphql-types';
 import { GraphQLError } from 'graphql/error';
@@ -17,7 +18,7 @@ export class TodoService {
   async getTodosByUserId(
     userId: string,
     args: { pagination?: TodoPaginationInput; filter?: TodosFilterInput },
-  ): Promise<Todo[]> {
+  ): Promise<TodoList> {
     try {
       return await this.todoRepository.findTodosByUserId(userId, args);
     } catch (error) {
