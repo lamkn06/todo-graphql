@@ -18,6 +18,22 @@ export class LabelService {
     }
   }
 
+  /**
+   * Batch load labels for multiple todo IDs
+   * Returns a map of todoId -> labels[]
+   */
+  async getLabelsByTodoIds(
+    todoIds: readonly string[],
+  ): Promise<Record<string, Label[]>> {
+    try {
+      return await this.labelRepository.findLabelsByTodoIds(todoIds);
+    } catch (error) {
+      throw new Error(
+        `Failed to get labels for todos: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+    }
+  }
+
   async getLabelById(id: string): Promise<Label | null> {
     try {
       return await this.labelRepository.findLabelById(id);

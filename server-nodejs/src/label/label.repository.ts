@@ -14,6 +14,31 @@ export class LabelRepository {
     });
   }
 
+  /**
+   * Batch load labels for multiple todo IDs
+   * Returns a map of todoId -> labels[]
+   */
+  async findLabelsByTodoIds(
+    todoIds: readonly string[],
+  ): Promise<Record<string, Label[]>> {
+    const todoLabels = await prisma.todoLabel.findMany({
+      where: { todoId: { in: [...todoIds] } },
+      include: { label: true },
+    });
+
+    // Group labels by todoId
+    const labelsByTodoId: Record<string, Label[]> = {};
+    todoIds.forEach((todoId) => {
+      labelsByTodoId[todoId] = [];
+    });
+
+    todoLabels.forEach((todoLabel) => {
+      labelsByTodoId[todoLabel.todoId].push(todoLabel.label);
+    });
+
+    return labelsByTodoId;
+  }
+
   async findLabelById(id: string): Promise<Label | null> {
     return prisma.label.findUnique({
       where: { id },

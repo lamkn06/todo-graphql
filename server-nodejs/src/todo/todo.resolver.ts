@@ -9,10 +9,12 @@ import type {
   TodosFilterInput,
   TodoList,
   UpdateTodoInput,
+  TodoFinishedPayload,
 } from '../generated/graphql-types';
 import { TodoService } from './todo.service';
 import { labelService } from '../label/label.resolver';
 import { handleResolverError } from '../utils/validation';
+import { pubsub, TODO_EVENTS } from '../lib/pubsub';
 const todoService = new TodoService();
 
 export const TodoResolvers = {
@@ -38,11 +40,13 @@ export const TodoResolvers = {
       try {
         const input = CreateTodoInputValidationSchema().parse(args.input);
 
-        return await todoService.createTodo({
+        const todo = await todoService.createTodo({
           userId: ctx.user.id,
           title: input.title,
           description: input.description || undefined,
         });
+
+        return todo;
       } catch (error) {
         throw handleResolverError(error);
       }
@@ -53,7 +57,15 @@ export const TodoResolvers = {
     ): Promise<Todo> => {
       try {
         const input = UpdateTodoInputSchema().parse(args.input);
-        return await todoService.updateTodo(args.id, input);
+        const todo = await todoService.updateTodo(args.id, input);
+        const { key, value } = input;
+        if (args.input.key === 'isFinished') {
+          pubsub.publish(TODO_EVENTS.TODO_FINISHED, {
+            id: todo.id,
+            isFinished: value,
+          });
+        }
+        return todo;
       } catch (error) {
         throw handleResolverError(error);
       }
@@ -64,6 +76,7 @@ export const TodoResolvers = {
     ): Promise<DeletionResponse> => {
       try {
         await todoService.deleteTodo(args.id);
+
         return {
           success: true,
           message: `${args.id} deleted successfully`,
@@ -74,9 +87,16 @@ export const TodoResolvers = {
     },
   },
 
+  Subscription: {
+    todoFinished: {
+      subscribe: () => pubsub.asyncIterableIterator(TODO_EVENTS.TODO_FINISHED),
+      resolve: (payload: TodoFinishedPayload) => payload,
+    },
+  },
+
   Todo: {
     labels: async (parent: any, _: unknown, ctx: GraphQLContext) => {
-      return await labelService.getLabelsByTodoId(parent.id);
+      return await ctx.loaders.labels.load(parent.id);
     },
   },
 };

@@ -108,6 +108,11 @@ export type QueryTodosArgs = {
   pagination?: InputMaybe<TodoPaginationInput>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  todoFinished: TodoFinishedPayload;
+};
+
 export type Todo = {
   __typename?: 'Todo';
   createdAt: Scalars['DateTime']['output'];
@@ -117,6 +122,12 @@ export type Todo = {
   labels?: Maybe<Array<Label>>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type TodoFinishedPayload = {
+  __typename?: 'TodoFinishedPayload';
+  id: Scalars['ID']['output'];
+  isFinished: Scalars['Boolean']['output'];
 };
 
 export type TodoList = {

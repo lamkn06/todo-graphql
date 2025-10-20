@@ -52,3 +52,12 @@ type Mutation {
   updateTodo(id: ID!, input: UpdateTodoInput!): Todo!
   deleteTodo(id: ID!): DeletionResponse
 }
+
+type Subscription {
+  todoFinished: TodoFinishedPayload!
+}
+
+type TodoFinishedPayload {
+  id: ID!
+  isFinished: Boolean!
+}
