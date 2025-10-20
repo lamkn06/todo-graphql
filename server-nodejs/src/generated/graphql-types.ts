@@ -88,11 +88,17 @@ export type Query = {
   __typename?: 'Query';
   label?: Maybe<Label>;
   labels: Array<Label>;
+  todo?: Maybe<Todo>;
   todos: TodoList;
 };
 
 
 export type QueryLabelArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTodoArgs = {
   id: Scalars['ID']['input'];
 };
 

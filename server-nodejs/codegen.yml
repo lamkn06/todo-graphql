@@ -2,23 +2,23 @@ schema:
   - "src/**/*.graphql"
 
 generates:
-  # 1) Generate Typescript types trước
+  # 1) Generate Typescript types first
   src/generated/graphql-types.ts:
     plugins:
       - typescript
       - typescript-operations
 
-  # 2) Generate Zod schemas & import lại types ở trên
+  # 2) Generate Zod schemas & import types from above
   src/generated/zod-schemas.ts:
     plugins:
       - typescript-validation-schema
     config:
       # Zod v4
       schema: zodv4
-      # ⚠️ Đường dẫn module TYPES để import vào zod-schemas.ts
-      #     KHÔNG kèm đuôi .ts | .js
+      # ⚠️ Module path for TYPES to import into zod-schemas.ts
+      #     DO NOT include .ts | .js extension
       importFrom: ./graphql-types
-      # Optional: cách export (function là mặc định tốt)
+      # Optional: export method (function is the default)
       validationSchemaExportType: function
       # Map scalar → Zod
       scalarSchemas:

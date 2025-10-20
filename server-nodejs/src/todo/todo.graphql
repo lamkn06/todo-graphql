@@ -39,6 +39,7 @@ input UpdateTodoInput {
 
 type Query {
   todos(pagination: TodoPaginationInput, filter: TodosFilterInput): TodoList!
+  todo(id: ID!): Todo
 }
 
 type DeletionResponse {

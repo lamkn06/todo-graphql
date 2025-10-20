@@ -30,7 +30,17 @@ export class TodoService {
 
   async getTodoById(id: string): Promise<Todo | null> {
     try {
-      return await this.todoRepository.findTodoById(id);
+      const todo = await this.todoRepository.findTodoById(id);
+      if (!todo) {
+        throw new GraphQLError('Todo not found', {
+          extensions: {
+            code: 'NOT_FOUND',
+            http: { status: 404 },
+          },
+        });
+      }
+
+      return todo;
     } catch (error) {
       throw new Error(
         `Failed to get todo ${id}: ${error instanceof Error ? error.message : 'Unknown error'}`,
